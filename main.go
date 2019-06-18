@@ -38,8 +38,6 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(routes.Routes)
-
 	for _, r := range routes.Routes {
 		mux.Handle("/"+r.Route, &RouteHandler{jsonStr: r.Payload})
 	}

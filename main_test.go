@@ -36,5 +36,4 @@ func TestRouteHandlers(t *testing.T) {
 			}
 		}(route)
 	}
-	// r, err := http.NewRequest("GET", "")
 }
