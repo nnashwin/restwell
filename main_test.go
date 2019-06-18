@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
-var routeArr = [...]Route{Route{Route: "cookies", Payload: "chocolateChip"}, Route{Route: "snacks", Payload: "{\"cookies\":\"vanilla\",\"cupcakeTypes\":[\"happiness\",\"chocolateChip\"]}"}}
+var routeArr = [...]Route{Route{Path: "cookies", Payload: "chocolateChip"}, Route{Path: "snacks", Payload: "{\"cookies\":\"vanilla\",\"cupcakeTypes\":[\"happiness\",\"chocolateChip\"]}"}}
 
 func TestRouteHandlers(t *testing.T) {
 	for _, route := range routeArr {

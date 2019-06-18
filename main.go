@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-const jsonStr = `{"routes":[{"route":"cookies","payload":"chocolateChip"},{"route":"snacks","payload":"{\"cookies\":\"vanilla\",\"cupcakeTypes\":[\"happiness\",\"chocolateChip\"]}"}]}`
+const jsonStr = `{"routes":[{"path":"cookies","payload":"chocolateChip"},{"path":"snacks","payload":"{\"cookies\":\"vanilla\",\"cupcakeTypes\":[\"happiness\",\"chocolateChip\"]}"}]}`
 
 const addr = "localhost:12345"
 
@@ -16,7 +16,7 @@ type Routes struct {
 }
 
 type Route struct {
-	Route   string `json:"route"`
+	Path    string `json:"path"`
 	Payload string `json:"payload"`
 }
 
@@ -39,7 +39,7 @@ func main() {
 	}
 
 	for _, r := range routes.Routes {
-		mux.Handle("/"+r.Route, &RouteHandler{jsonStr: r.Payload})
+		mux.Handle("/"+r.Path, &RouteHandler{jsonStr: r.Payload})
 	}
 	log.Printf("Now Listening on %s...\n", addr)
 
