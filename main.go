@@ -9,6 +9,8 @@ import (
 
 const jsonStr = `{"routes":[{"route":"cookies","payload":"chocolateChip"},{"route":"snacks","payload":"{\"cookies\":\"vanilla\",\"cupcakeTypes\":[\"happiness\",\"chocolateChip\"]}"}]}`
 
+const addr = "localhost:12345"
+
 type Routes struct {
 	Routes []Route `json:"routes"`
 }
@@ -18,14 +20,17 @@ type Route struct {
 	Payload string `json:"payload"`
 }
 
-func handler(str string) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Serving up %s", str)
-	}
+type RouteHandler struct {
+	jsonStr string `json:"payload"`
+}
+
+func (rh *RouteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Serving up %s", rh.jsonStr)
 }
 
 func main() {
 	var routes Routes
+	mux := http.NewServeMux()
 
 	err := json.Unmarshal([]byte(jsonStr), &routes)
 	if err != nil {
@@ -36,8 +41,11 @@ func main() {
 	fmt.Println(routes.Routes)
 
 	for _, r := range routes.Routes {
-		http.HandleFunc("/"+r.Route, handler(r.Payload))
+		mux.Handle("/"+r.Route, &RouteHandler{jsonStr: r.Payload})
 	}
+	log.Printf("Now Listening on %s...\n", addr)
 
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	server := http.Server{Handler: mux, Addr: addr}
+
+	log.Fatal(server.ListenAndServe())
 }
