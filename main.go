@@ -25,7 +25,7 @@ type RouteHandler struct {
 }
 
 func (rh *RouteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Serving up %s", rh.jsonStr)
+	fmt.Fprintf(w, rh.jsonStr)
 }
 
 func main() {
