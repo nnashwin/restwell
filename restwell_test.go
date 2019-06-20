@@ -1,4 +1,4 @@
-package main
+package restwell
 
 import (
 	"io/ioutil"
@@ -35,4 +35,8 @@ func TestRouteHandlers(t *testing.T) {
 			}
 		}(route)
 	}
+}
+
+func TestMuxIsCreatedCorrectly(t *testing.T) {
+
 }

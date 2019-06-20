@@ -1,15 +1,10 @@
-package main
+package restwell
 
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 )
-
-const jsonStr = `{"routes":[{"path":"cookies","payload":"chocolateChip"},{"path":"snacks","payload":"{\"cookies\":\"vanilla\",\"cupcakeTypes\":[\"happiness\",\"chocolateChip\"]}"}]}`
-
-const addr = "localhost:12345"
 
 type Routes struct {
 	Routes []Route `json:"routes"`
@@ -32,7 +27,7 @@ func (rh *RouteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(rh.jsonStr))
 }
 
-func main() {
+func CreateMuxFromJSON(jsonStr string) *http.ServeMux {
 	var routes Routes
 	mux := http.NewServeMux()
 
@@ -45,9 +40,6 @@ func main() {
 	for _, r := range routes.Routes {
 		mux.Handle("/"+r.Path, &RouteHandler{jsonStr: r.Payload})
 	}
-	log.Printf("Now Listening on %s...\n", addr)
 
-	server := http.Server{Handler: mux, Addr: addr}
-
-	log.Fatal(server.ListenAndServe())
+	return mux
 }
