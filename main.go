@@ -25,7 +25,11 @@ type RouteHandler struct {
 }
 
 func (rh *RouteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, rh.jsonStr)
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(rh.jsonStr))
 }
 
 func main() {
